@@ -28,7 +28,7 @@ pipeline {
             steps {
                 sh '''
                     . $VENV_DIR/bin/activate
-                    pytest tests
+                    PYTHONPATH=. pytest tests
                 '''
             }
         }
