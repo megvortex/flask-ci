@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/USERNAME/flask-ci'
+                git 'https://github.com/megvortex/flask-ci'
             }
         }
 
