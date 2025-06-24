@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     environment {
-        APP_PORT = '5000'
+        VENV_DIR = 'venv'
+	APP_PORT = '5000'
     }
 
     stages {
@@ -12,21 +13,32 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Setup Python Virtualenv') {
             steps {
-                sh 'pip install -r requirements.txt'
+                sh '''
+                    python3 -m venv $VENV_DIR
+                    . $VENV_DIR/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
+                '''
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'pytest tests'
+                sh '''
+                    . $VENV_DIR/bin/activate
+                    pytest tests
+                '''
             }
         }
 
-        stage('Deploy Application') {
+        stage('Deploy') {
             steps {
-                sh 'nohup python3 app.py &'
+                sh '''
+                    . $VENV_DIR/bin/activate
+                    nohup python app.py &
+                '''
             }
         }
     }
